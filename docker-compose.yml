@@ -1,0 +1,66 @@
+services:
+    vendor-machine-app:
+        build:
+            context: ./deploy/php
+            dockerfile: Dockerfile
+        container_name: vendor-machine-app
+        volumes:
+            - .:/var/www:delegated
+        environment:
+            REDIS_HOST: ${REDIS_HOST}
+            APP_ENV: ${APP_ENV}
+            APP_DEBUG: ${APP_DEBUG}
+            APP_KEY: ${APP_KEY}
+        ports:
+            - "8000:8000"
+        depends_on:
+            - vendor-machine-redis
+        networks:
+            - app_net
+            - web_net
+
+    vendor-machine-nginx:
+        build:
+            context: ./deploy/ngx
+            dockerfile: Dockerfile
+        container_name: vendor-machine-nginx
+        volumes:
+            - .:/var/www
+            - ./deploy/ngx/nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - "80:80"
+        depends_on:
+            vendor-machine-app:
+                condition: service_started
+        environment:
+            NGINX_FPM_HOST: vendor-machine-app
+            NGINX_ROOT: /var/www/public
+        networks:
+            - app_net
+            - web_net
+
+    vendor-machine-redis:
+        image: redis:alpine
+        container_name: vendor-machine-redis
+        restart: always
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        networks:
+            - app_net
+
+networks:
+    app_net:
+        driver: bridge
+    web_net:
+        driver: bridge
+
+volumes:
+    db_data:
+    redis_data:
