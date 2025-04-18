@@ -39,8 +39,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        Integration::handles($exceptions);
-
         $exceptions->render(function (ValidationException $e, Request $request) {
             return Responder::error(__('exception.validation'), $e->errors(), $e->status);
         });
