@@ -9,7 +9,8 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'item_id' => ['required', 'integer','exists:items,id'],
+            'request_code' => ['required', 'string', 'exists:payments,request_code'],
         ];
     }
 }

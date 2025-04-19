@@ -46,8 +46,12 @@ class Order extends Model
     {
         parent::booted();
 
+        static::creating(function (Model $model) {
+           $model->status = OrderStatusEnum::INIT();
+        });
+
         static::created(function (Model $model) {
-            $model->identifier = identifier($model->id);
+            $model->identifier = identifier($model->id); //todo: handle identifier or alternative way!
             $model->save();
         });
     }

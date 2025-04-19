@@ -10,7 +10,7 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('identifier')->unique()->nullable();
+            $table->ulid('identifier')->unique()->nullable();
             $table->unsignedBigInteger('payment_id');
             $table->unsignedBigInteger('item_id');
             $table->string('status');

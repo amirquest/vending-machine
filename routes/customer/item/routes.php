@@ -1,5 +1,5 @@
 <?php
 
-use App\Http\Controllers\Customer\Item\ItemController;
+use App\Http\Controllers\Customer\Item\PreviewItemsController;
 
-Route::get('/', [ItemController::class, 'index'])->name('index');
+Route::get('/', PreviewItemsController::class)->name('index');

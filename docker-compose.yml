@@ -7,6 +7,11 @@ services:
         volumes:
             - .:/var/www:delegated
         environment:
+            DB_HOST: ${DB_HOST}
+            DB_PORT: ${DB_PORT}
+            DB_DATABASE: ${DB_DATABASE}
+            DB_USERNAME: ${DB_USERNAME}
+            DB_PASSWORD: ${DB_PASSWORD}
             REDIS_HOST: ${REDIS_HOST}
             APP_ENV: ${APP_ENV}
             APP_DEBUG: ${APP_DEBUG}
@@ -14,6 +19,7 @@ services:
         ports:
             - "8000:8000"
         depends_on:
+            - vendor-machine-db
             - vendor-machine-redis
         networks:
             - app_net
@@ -38,6 +44,25 @@ services:
         networks:
             - app_net
             - web_net
+
+    vendor-machine-db:
+        image: mariadb:11.5
+        container_name: vendor-machine-db
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - db_data:/var/lib/mysql
+            - './storage/vol/init:/docker-entrypoint-initdb.d'
+            - './deploy/scripts/database.sql:/docker-entrypoint-initdb.d/database.sql'
+        command: '--init-file /docker-entrypoint-initdb.d/database.sql'
+        ports:
+            - "3306:3306"
+        networks:
+            - app_net
 
     vendor-machine-redis:
         image: redis:alpine

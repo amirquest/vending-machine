@@ -5,17 +5,17 @@ namespace App\Enums;
 use App\Enums\Traits\BaseEnum;
 
 /**
- * @method static ESTABLISHED()
- * @method static CANCELED()
- * @method static REJECTED()
- * @method static FINISHED()
+ * @method static INIT()
+ * @method static SUBMITTED()
+ * @method static DELIVERED()
+ * @method static FAILED()
  */
 enum OrderStatusEnum
 {
     use BaseEnum;
 
-    case IDLE;
-    case CHOOSING_PRODUCT;
-    case PREPARING_PRODUCT;
+    case INIT;
+    case SUBMITTED;
     case DELIVERED;
+    case FAILED;
 }

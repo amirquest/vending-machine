@@ -1,5 +1,5 @@
 <?php
 
-use App\Http\Controllers\Customer\Payment\PaymentController;
+use App\Http\Controllers\Customer\Payment\PurchasePaymentController;
 
-Route::post('pay', PaymentController::class)->name('pay');
+Route::post('pay', PurchasePaymentController::class)->name('pay');

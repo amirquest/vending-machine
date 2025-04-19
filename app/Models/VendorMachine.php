@@ -6,6 +6,7 @@ use App\Services\StateMachine\Concerns\HasState;
 use App\Services\States\VendorMachine\VendorMachineStateMachine;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class VendorMachine extends Model
 {
@@ -18,4 +19,9 @@ class VendorMachine extends Model
         'slug',
         'name',
     ];
+
+    public function inventory(): HasMany
+    {
+        return $this->hasMany(Inventory::class);
+    }
 }

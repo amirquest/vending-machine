@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->ulid('request_code');
+            $table->ulid('amount');
             $table->string('status');
 
             $table->timestamps();
