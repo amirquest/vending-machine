@@ -12,7 +12,7 @@ class Inventory extends Model
 
     protected $fillable = [
         'item_id',
-        'vendor_machine_id',
+        'vending_machine_id',
         'quantity',
     ];
 
@@ -21,8 +21,8 @@ class Inventory extends Model
         return $this->hasOne(Item::class);
     }
 
-    public function vendorMachine(): HasOne
+    public function vendingMachine(): HasOne
     {
-        return $this->hasOne(VendorMachine::class);
+        return $this->hasOne(VendingMachine::class);
     }
 }

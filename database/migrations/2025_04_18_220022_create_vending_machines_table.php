@@ -8,17 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('vendor_machines', function (Blueprint $table) {
+        Schema::create('vending_machines', function (Blueprint $table) {
             $table->id();
             $table->string('slug');
             $table->string('name');
             $table->string('status');
+            $table->timestamp('status_changed_at')->nullable();
+            $table->unsignedBigInteger('healthy_retry_interval')->nullable();
+            $table->unsignedBigInteger('unhealthy_count')->default(0);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('vendor_machines');
+        Schema::dropIfExists('vending_machines');
     }
 };

@@ -6,8 +6,8 @@ use App\Models\Admin;
 use App\Models\Inventory;
 use App\Models\Item;
 use App\Models\Order;
-use App\Models\StatusLog;
-use App\Models\VendorMachine;
+use App\Models\Payment;
+use App\Models\VendingMachine;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
@@ -33,7 +33,8 @@ class AppServiceProvider extends ServiceProvider
             'order' => Order::class,
             'inventory' => Inventory::class,
             'item' => Item::class,
-            'vendor_machine' => VendorMachine::class,
+            'vending_machine' => VendingMachine::class,
+            'payment' => Payment::class,
         ]);
     }
 }

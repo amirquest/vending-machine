@@ -14,20 +14,11 @@ readonly class StateChangedListener
 
     public function handle(StateChangedEvent $event): void
     {
-        $statusLog = $this->statusLogger
+        $this->statusLogger
             ->performedOn($event->model)
             ->causedBy($event->causer)
             ->from($event->initialState->toString())
             ->to($event->finalState->toString())
             ->log();
-
-        if (method_exists($event->transition, 'cancelReasons')) {
-            $event->transition->setStatusLog($statusLog);
-            app()->call([$event->transition, 'cancelReasons']);
-        }
-
-        if (method_exists($event->transition, 'notify')) {
-            app()->call([$event->transition, 'notify']);
-        }
     }
 }

@@ -16,6 +16,7 @@ class Payment extends Model
     public static string $stateMachine = PaymentStateMachine::class;
 
     protected $fillable = [
+        'status_changed_at',
         'request_code',
     ];
 

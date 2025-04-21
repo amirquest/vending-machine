@@ -16,7 +16,6 @@ class ItemSeeder extends Seeder
                 ],
                 [
                     'name' => $item['name'],
-                    'description' => $item['description'],
                 ]
             );
         }

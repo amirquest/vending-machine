@@ -13,6 +13,7 @@ return new class extends Migration
             $table->ulid('request_code');
             $table->ulid('amount');
             $table->string('status');
+            $table->timestamp('status_changed_at')->nullable();
 
             $table->timestamps();
         });

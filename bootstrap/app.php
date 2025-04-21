@@ -1,10 +1,10 @@
 <?php
 
+use App\Console\Commands\CheckWaitingOrdersCommand;
+use App\Console\Commands\InquiryUnReceivedCallbacksCommand;
+use App\Console\Commands\RetryUnhealthyVendingMachineCommand;
 use App\Http\Middleware\AlreadyAuthenticated;
-use App\Http\Middleware\ConvertStrings;
 use App\Http\Middleware\SetLocale;
-use App\Http\Middleware\SurveyAuthenticationMiddleware;
-use Facades\App\Support\Responder;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -29,13 +29,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withSchedule(function (Schedule $schedule) {
+        $schedule->command(RetryUnhealthyVendingMachineCommand::class)->everyFifteenSeconds();
+        $schedule->command(InquiryUnReceivedCallbacksCommand::class)->everyMinute();
+        $schedule->command(CheckWaitingOrdersCommand::class)->everyFifteenSeconds();
     })
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(ConvertStrings::class);
         $middleware->alias([
             'guest' => AlreadyAuthenticated::class,
             'setLocale' => SetLocale::class,
-            'auth.survey' => SurveyAuthenticationMiddleware::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

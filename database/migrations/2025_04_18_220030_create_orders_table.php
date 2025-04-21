@@ -10,12 +10,12 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->ulid('identifier')->unique()->nullable();
+            $table->unsignedBigInteger('identifier')->unique()->nullable();
             $table->unsignedBigInteger('payment_id');
             $table->unsignedBigInteger('item_id');
             $table->string('status');
             $table->timestamp('status_changed_at')->nullable();
-            $table->unsignedBigInteger('vendor_machine_id')->nullable();
+            $table->unsignedBigInteger('vending_machine_id')->nullable();
 
             $table->timestamps();
 

@@ -11,7 +11,7 @@ class InventoryRepository extends AbstractRepository
     public function findByVendorMachineAndItem(int $vendorMachineId, int $itemId): Inventory
     {
         return $this->getQuery()
-            ->where('vendor_machine_id', $vendorMachineId)
+            ->where('vending_machine_id', $vendorMachineId)
             ->where('item_id', $itemId)
             ->lockForUpdate()
             ->firstOrFail();

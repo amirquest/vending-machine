@@ -8,14 +8,14 @@ use App\Enums\Traits\BaseEnum;
  * @method static IDLE()
  * @method static PREPARING()
  * @method static TEST()
- * @method static OUT_OF_SERVICE()
+ * @method static UNHEALTHY()
  */
-enum VendorMachineStatusEnum
+enum VendingMachineStatusEnum
 {
     use BaseEnum;
 
     case IDLE;
     case PREPARING;
     case TEST;
-    case OUT_OF_SERVICE;
+    case UNHEALTHY;
 }

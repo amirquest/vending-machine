@@ -14,20 +14,5 @@ use Tests\Concerns\ActingAsTrait;
 abstract class FeatureTestCase extends TestCase
 {
     use LazilyRefreshDatabase;
-    use ActingAsTrait;
 
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Storage::fake('public');
-
-        Http::preventStrayRequests();
-
-        Event::listen(DatabaseRefreshed::class, function () {
-            $this->artisan('db:seed', ['--class' => RoleAndPermissionSeeder::class]);
-            $this->app->make(PermissionRegistrar::class)->forgetCachedPermissions();
-        });
-    }
 }
