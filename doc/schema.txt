@@ -1,0 +1,31 @@
++----------------+          +---------------------+          +----------------+          +-----------------+
+|   Customer     |          | Centralized System  |          |   Worker Pool  |          | Vendor Machines |
+|                |          |                     |          |                |          |                 |
+| 1. Pay         |<------->| Payment Processor   |          |                |          |                 |
+| 2. Get         |          | - Validate payment  |          |                |          |                 |
+|    request_code|          | - Generate RC       |          |                |          |                 |
+| 3. Preview     |<------->| Inventory Manager   |<------->|                |<------->| Inventory DB    |
+|    Items       |          | - Query inventory   |          |                |          | - Track items   |
+| 4. Select Item |          | Order Manager       |          | Task Queue     |          | Order Processor |
+|    + RC        |          | - Validate RC       |          | - Store orders |          | - Dispense item |
+|                |          | - Check inventory   |          | Worker Nodes   |          |                 |
+|                |          | - Create order      |-------->| - Select VM    |          |                 |
+|                |<---------| - Return status + ID|          | - Check inv.   |-------->|                 |
+|                |          |                     |          | - Send request |          |                 |
+|                |<---------| - Callback (Order   |<---------|                |<---------| - Callback      |
+|                |          |   Complete)         |          |                |          |   (Item Ready)  |
+|                |          |                     |          |                |          |                 |
+|                |          | [Background Process] |          |                |          | [Background     |
+|                |          | - Monitor orders:   |          |                |          |  Process]       |
+|                |          |   If no callback >1m|-------->| - Mark VM      |-------->| - Mark unhealthy|
+|                |          |   mark VM unhealthy |          |   unhealthy    |          |   if no callback|
+|                |          | - Check unhealthy   |          | - Find another |          | - Update to     |
+|                |          |   VMs, set to test  |          |   VM           |          |   test status   |
++----------------+          +---------------------+          +----------------+          +-----------------+
+
+Key:
+  <-------> : Bidirectional data flow (e.g., request/response)
+  --------> : Unidirectional data flow (e.g., order initiation, callbacks)
+  RC        : request_code
+  VM        : Vending Machine
+  [Background Process] : Asynchronous monitoring tasks
