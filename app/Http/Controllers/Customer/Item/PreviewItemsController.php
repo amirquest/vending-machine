@@ -17,7 +17,7 @@ class PreviewItemsController extends Controller
     public function __invoke(): JsonResponse
     {
         try {
-            $items = $this->itemRepository->get();
+            $items = $this->itemRepository->getAll();
         }
         catch (Throwable $th){
             return $this->error();

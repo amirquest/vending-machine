@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('vending_machines', function (Blueprint $table) {
             $table->id();
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->string('name');
             $table->string('status');
             $table->timestamp('status_changed_at')->nullable();

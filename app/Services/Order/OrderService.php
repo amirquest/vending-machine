@@ -14,6 +14,7 @@ use App\Services\Inventory\InventoryService;
 use App\Services\VendingMachine\Gateways\VendingMachineGateway;
 use App\Services\VendingMachine\UpdateVendingMachineStatusService;
 use App\Services\VendingMachine\VendingMachineService;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
@@ -23,12 +24,13 @@ class OrderService
     public function __construct(
         private readonly PaymentRepository                 $paymentRepository,
         private readonly OrderRepository                   $orderRepository,
-        private readonly VendingMachineService             $vendorMachineService,
         private readonly InventoryRepository               $inventoryRepository,
-        private readonly UpdateVendingMachineStatusService $updateVendorMachineStatusService,
+        private readonly VendingMachineService             $vendorMachineService,
         private readonly InventoryService                  $inventoryService,
-        private readonly UpdateOrderStatusService          $updateOrderStatusService,
         private readonly VendingMachineGateway             $vendingMachineGateway,
+        private readonly UpdateOrderStatusService          $updateOrderStatusService,
+        private readonly UpdateVendingMachineStatusService $updateVendorMachineStatusService,
+        private readonly Dispatcher                        $dispatcher
     )
     {
     }
@@ -45,7 +47,7 @@ class OrderService
         $attributes = ['payment_id' => $payment->id, 'item_id' => $itemId];
         $order = $this->orderRepository->persist($attributes);
 
-        SendOrderToVendingMachineJob::dispatch($order->id);
+        $this->dispatcher->dispatch(new SendOrderToVendingMachineJob($order->id));
 
         return $order;
     }

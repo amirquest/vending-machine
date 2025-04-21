@@ -25,6 +25,8 @@ PurchasePaymentController extends Controller
             return $this->error();
         }
 
-        return $this->success(PaymentPurchaseResource::make($payment));
+        return $this
+            ->setMessage('Purchase Paid Successfully')
+            ->success(PaymentPurchaseResource::make($payment));
     }
 }

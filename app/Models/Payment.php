@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentStatusEnum;
 use App\Services\StateMachine\Concerns\HasState;
 use App\Services\States\Payment\PaymentStateMachine;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,7 @@ class Payment extends Model
     public static string $stateMachine = PaymentStateMachine::class;
 
     protected $fillable = [
+        'amount',
         'status_changed_at',
         'request_code',
     ];
@@ -24,9 +26,9 @@ class Payment extends Model
     {
         parent::booted();
 
-        static::created(function (Model $model) {
+        static::creating(function (Model $model) {
             $model->request_code = Str::ulid()->toString();
-            $model->save();
+            $model->status = PaymentStatusEnum::PAID();
         });
     }
 }

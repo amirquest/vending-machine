@@ -21,7 +21,7 @@ return new class extends Migration {
 
             $table->foreign('payment_id')->references('id')->on('payments');
             $table->foreign('item_id')->references('id')->on('items');
-            $table->foreign('vendor_machine_id')->references('id')->on('vendor_machines');
+            $table->foreign('vending_machine_id')->references('id')->on('vending_machines');
         });
     }
 

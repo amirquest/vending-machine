@@ -8,3 +8,7 @@ Route::prefix('payments/')
 Route::prefix('orders/')
     ->name('order.')
     ->group(__DIR__ . '/order/routes.php');
+
+Route::prefix('items/')
+    ->name('item.')
+    ->group(__DIR__ . '/item/routes.php');

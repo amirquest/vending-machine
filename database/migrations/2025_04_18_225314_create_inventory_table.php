@@ -11,13 +11,13 @@ return new class extends Migration
         Schema::create('inventory', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_id');
-            $table->unsignedBigInteger('vendor_machine_id');
+            $table->unsignedBigInteger('vending_machine_id');
             $table->unsignedBigInteger('quantity');
 
             $table->timestamps();
 
             $table->foreign('item_id')->references('id')->on('items');
-            $table->foreign('vendor_machine_id')->references('id')->on('vendor_machines');
+            $table->foreign('vending_machine_id')->references('id')->on('vending_machines');
         });
     }
 
