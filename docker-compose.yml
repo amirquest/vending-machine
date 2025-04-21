@@ -1,12 +1,17 @@
 services:
-    vendor-machine-app:
+    vending-machine-app:
         build:
             context: ./deploy/php
             dockerfile: Dockerfile
-        container_name: vendor-machine-app
+        container_name: vending-machine-app
         volumes:
             - .:/var/www:delegated
         environment:
+            DB_HOST: ${DB_HOST}
+            DB_PORT: ${DB_PORT}
+            DB_DATABASE: ${DB_DATABASE}
+            DB_USERNAME: ${DB_USERNAME}
+            DB_PASSWORD: ${DB_PASSWORD}
             REDIS_HOST: ${REDIS_HOST}
             APP_ENV: ${APP_ENV}
             APP_DEBUG: ${APP_DEBUG}
@@ -14,34 +19,54 @@ services:
         ports:
             - "8000:8000"
         depends_on:
-            - vendor-machine-redis
+            - vending-machine-db
+            - vending-machine-redis
         networks:
             - app_net
             - web_net
 
-    vendor-machine-nginx:
+    vending-machine-nginx:
         build:
             context: ./deploy/ngx
             dockerfile: Dockerfile
-        container_name: vendor-machine-nginx
+        container_name: vending-machine-nginx
         volumes:
             - .:/var/www
             - ./deploy/ngx/nginx.conf:/etc/nginx/nginx.conf
         ports:
             - "80:80"
         depends_on:
-            vendor-machine-app:
+            vending-machine-app:
                 condition: service_started
         environment:
-            NGINX_FPM_HOST: vendor-machine-app
+            NGINX_FPM_HOST: vending-machine-app
             NGINX_ROOT: /var/www/public
         networks:
             - app_net
             - web_net
 
-    vendor-machine-redis:
+    vending-machine-db:
+        image: mariadb:11.5
+        container_name: vending-machine-db
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - db_data:/var/lib/mysql
+            - './storage/vol/init:/docker-entrypoint-initdb.d'
+            - './deploy/scripts/database.sql:/docker-entrypoint-initdb.d/database.sql'
+        command: '--init-file /docker-entrypoint-initdb.d/database.sql'
+        ports:
+            - "3306:3306"
+        networks:
+            - app_net
+
+    vending-machine-redis:
         image: redis:alpine
-        container_name: vendor-machine-redis
+        container_name: vending-machine-redis
         restart: always
         ports:
             - "6379:6379"

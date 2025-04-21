@@ -1,6 +1,11 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\IdentifierServiceProvider;
+use App\Providers\RouteServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\AuthServiceProvider::class,
+    AppServiceProvider::class,
+    IdentifierServiceProvider::class,
+    RouteServiceProvider::class
 ];
